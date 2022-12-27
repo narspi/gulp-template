@@ -1,0 +1,104 @@
+@import './libs';
+
+@font-face {
+    font-family: 'gilroy';
+    src: url('../fonts/gilroy-medium.woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'gilroy';
+    src: url('../fonts/gilroy-semibold.woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+body {
+    // font-family: 'gilroy',sans-serif;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+button {
+    cursor: pointer;
+}
+
+.container {
+    max-width: 1230px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+.header__container {
+    max-width: 1610px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+.btn {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.4;
+    background-image: linear-gradient(180deg, #007CEA 0%, #102137 100%);
+    box-shadow: 0px 4px 5px rgba(58, 51, 51, 0.25);
+    padding: 17px 16px;
+    border: none;
+    color: #fff;
+}
+
+.btn.red {
+    background-image: linear-gradient(180deg, #D3292C 0%, #551415 100%);
+}
+
+@import './header';
+
+.top {
+    max-width: 1920px;
+    margin: 0 auto;
+    min-height: 788px;
+    position: relative;
+    display: flex;
+    align-items: start;
+
+    &__content {
+        padding-left: calc((100% - 1230px) / 2);
+    }
+
+    &__decor {
+        flex-shrink: 0;
+        width: 40%;
+        aspect-ratio: 970 / 788;
+        background-image: url(../img/top-bg.jpg);
+        background-repeat: no-repeat;
+        background-position: top right;
+        background-size: contain;
+    }
+
+    // &::before,&::after {
+    //     content: "";
+    //     position: absolute;
+    //     top: 0;
+    //     width: 0;
+    //     height: 0;
+    // }
+
+    // &::before {
+    //     left: 0;
+    //     border-top: 394px solid #B32626; 
+    //     border-bottom: 394px solid transparent;
+    //     border-left: 145px solid #B32626;
+    //     border-right: 145px solid transparent;
+    // }
+
+    &::after {
+        right: 0;
+        border-top: 394px solid transparent; 
+        border-bottom: 394px solid #B32626;
+        border-left: 145px solid transparent;
+        border-right: 145px solid #B32626;
+    }
+}
+

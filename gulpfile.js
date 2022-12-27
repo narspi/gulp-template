@@ -45,13 +45,25 @@ const createCss = () => {
     .pipe(sync.stream());
 }
 
+const transportFonts = () => {
+    return src('./src/fonts/**/*.*')
+    .pipe(dest('dist/fonts'))
+}
+
+const transportImg = () => {
+    return src('./src/img/**/*.*')
+    .pipe(dest('dist/img'))
+}
+
 
 const server = () => {
     sync.init({
         server: './dist'
     });
+    watch('./src/fonts/**/*.*', transportFonts);
+    watch('./src/img/**/*.*', transportImg);
     watch('./src/html/**/*.html', htmlInclude);
     watch('./src/scss/**/*.scss', createCss);
 }
 
-export default series(htmlInclude,transportLibs,createCss,server);
+export default series(htmlInclude,transportLibs,createCss,transportFonts,transportImg,server);
