@@ -3,8 +3,11 @@ import panini from 'panini';
 import browserSync  from 'browser-sync';
 import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
-import dartSass from 'sass';
+import * as dartSass from 'sass'
 import gulpSass from 'gulp-sass';
+
+const tasks = gulp.registry().tasks();
+console.log(tasks);
 
 const scss = gulpSass(dartSass);
 
@@ -66,4 +69,19 @@ const server = () => {
     watch('./src/scss/**/*.scss', createCss);
 }
 
-export default series(htmlInclude,transportLibs,createCss,transportFonts,transportImg,server);
+const serverTunnel = () => {
+    sync.init({
+        server: './dist',
+        tunnel: true
+    });
+    watch('./src/fonts/**/*.*', transportFonts);
+    watch('./src/img/**/*.*', transportImg);
+    watch('./src/html/**/*.html', htmlInclude);
+    watch('./src/scss/**/*.scss', createCss);
+}
+
+const defaultTask = series(htmlInclude,createCss,transportFonts,transportImg,server);
+const serverTunnelTask = series(htmlInclude,transportLibs,createCss,transportFonts,transportImg,serverTunnel);
+const buildTask = series(htmlInclude,transportLibs,createCss,transportFonts,transportImg);
+
+export { defaultTask as default, serverTunnelTask as tunnel, buildTask as build};

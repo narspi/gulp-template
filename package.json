@@ -5,24 +5,28 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "dev": "gulp",
+    "server": "gulp tunnel",
+    "build": "gulp build"
   },
   "keywords": [],
   "author": "alexander ivanov",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.27.11",
+    "browser-sync": "^3.0.2",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
+    "localtunnel": "^2.0.2",
     "panini": "^1.7.2",
-    "sass": "^1.57.1"
+    "sass": "^1.69.7"
   },
   "dependencies": {
     "focus-visible": "^5.2.0",
-    "modern-normalize": "^1.1.0",
-    "swiper": "^8.4.5"
+    "modern-normalize": "^2.0.0",
+    "swiper": "^11.0.5"
   }
 }
