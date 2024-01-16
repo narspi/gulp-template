@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "gulp",
-    "dev": "gulp",
-    "server": "gulp tunnel",
+    "start": "gulp start",
+    "dev": "cross-env PRODUCTION=development gulp",
+    "server": "cross-env PRODUCTION=development TUNNEL=run gulp",
     "build": "gulp build"
   },
   "keywords": [],
@@ -15,9 +15,12 @@
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^3.0.2",
+    "cross-env": "^7.0.3",
     "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
     "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1",
+    "gulp-if": "^3.0.0",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
     "localtunnel": "^2.0.2",
