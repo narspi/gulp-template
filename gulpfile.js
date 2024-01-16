@@ -7,6 +7,7 @@ import * as dartSass from "sass";
 import gulpSass from "gulp-sass";
 import cleanCSS from "gulp-clean-css";
 import gulpif from "gulp-if";
+import terser from "gulp-terser";
 
 const isDevelopment = process.env.PRODUCTION === "development";
 const isTunnel = process.env.TUNNEL === "run";
@@ -50,6 +51,17 @@ const createCss = () => {
     .pipe(sync.stream());
 };
 
+const createJs = () => {
+  return gulp
+    .src("./src/js/**/*.js")
+    .pipe(
+      terser({
+        ecma: 5,
+      })
+    )
+    .pipe(dest("dist/js"));
+};
+
 const transportFonts = () => {
   return src("./src/fonts/**/*.*").pipe(dest("dist/fonts"));
 };
@@ -79,17 +91,20 @@ const buildServer = () => {
 const defaultTask = series(
   htmlInclude,
   createCss,
+  createJs,
   transportFonts,
   transportImg,
   server
 );
 
-
-const buildTask = series(htmlInclude, createCss, transportFonts, transportImg);
-
-const startServer = series(
-    buildTask,
-    buildServer
+const buildTask = series(
+  htmlInclude,
+  createCss,
+  createJs,
+  transportFonts,
+  transportImg
 );
+
+const startServer = series(buildTask, buildServer);
 
 export { defaultTask as default, buildTask as build, startServer as start };
