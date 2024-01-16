@@ -1,13 +1,13 @@
 import gulp from "gulp";
 import panini from "panini";
 import browserSync from "browser-sync";
-import concat from "gulp-concat";
 import sourcemaps from "gulp-sourcemaps";
 import * as dartSass from "sass";
 import gulpSass from "gulp-sass";
 import cleanCSS from "gulp-clean-css";
 import gulpif from "gulp-if";
-import terser from "gulp-terser";
+import rollup from "gulp-rollup";
+import terser from "@rollup/plugin-terser";
 
 const isDevelopment = process.env.PRODUCTION === "development";
 const isTunnel = process.env.TUNNEL === "run";
@@ -54,12 +54,26 @@ const createCss = () => {
 const createJs = () => {
   return gulp
     .src("./src/js/**/*.js")
+    .pipe(gulpif(isDevelopment, sourcemaps.init()))
     .pipe(
-      terser({
-        ecma: 5,
+      rollup({
+        input: "src/js/main.js",
+        format: "iife",
+        allowRealFiles: true,
+        plugins: [
+          terser({
+            mangle: false, // Отключаем манглирование
+            format: {
+              beautify: true, // Отключаем минификацию
+              comments: true, // Сохраняем комментарии
+            },
+          }),
+        ],
       })
     )
-    .pipe(dest("dist/js"));
+    .pipe(gulpif(isDevelopment, sourcemaps.write()))
+    .pipe(dest("dist/js"))
+    .pipe(sync.stream());
 };
 
 const transportFonts = () => {
@@ -79,6 +93,7 @@ const server = () => {
   watch("./src/img/**/*.*", transportImg);
   watch("./src/html/**/*.html", htmlInclude);
   watch("./src/scss/**/*.scss", createCss);
+  watch("./src/js/**/*.js", createJs);
 };
 
 const buildServer = () => {
