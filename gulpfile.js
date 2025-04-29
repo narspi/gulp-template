@@ -6,9 +6,11 @@ import * as dartSass from "sass";
 import gulpSass from "gulp-sass";
 import cleanCSS from "gulp-clean-css";
 import gulpif from "gulp-if";
+import postcss from "gulp-postcss";
+import autoprefixer from "autoprefixer";
 import gulpEsbuild from "gulp-esbuild";
 
-const isDevelopment = process.env.PRODUCTION === "development";
+const isDevelopment = process.env.MODE === "development";
 const isTunnel = process.env.TUNNEL === "run";
 
 const scss = gulpSass(dartSass);
@@ -37,14 +39,20 @@ const createCss = () => {
     .pipe(gulpif(isDevelopment, sourcemaps.init()))
     .pipe(
       scss({
-        outputStyle: `${isDevelopment? 'expanded' : 'compressed'}`,
+        outputStyle: `${isDevelopment ? "expanded" : "compressed"}`,
       })
     )
+    .pipe(postcss([autoprefixer()]))
     .pipe(
       cleanCSS(
-        {
-          level: 2
-        }
+        isDevelopment
+          ? { format: "beautify", level: { 1: { specialComments: 0 } } }
+          : {
+              level: {
+                1: { specialComments: 0 },
+                2: {}, 
+              },
+            }
       )
     )
     .pipe(gulpif(isDevelopment, sourcemaps.write()))

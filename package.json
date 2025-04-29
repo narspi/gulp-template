@@ -6,14 +6,15 @@
   "type": "module",
   "scripts": {
     "start": "gulp start",
-    "dev": "cross-env PRODUCTION=development gulp",
-    "server": "cross-env PRODUCTION=development TUNNEL=run gulp",
+    "dev": "cross-env MODE=development gulp",
+    "server": "cross-env MODE=development TUNNEL=run gulp",
     "build": "gulp build"
   },
   "keywords": [],
   "author": "alexander ivanov",
   "license": "ISC",
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "browser-sync": "^3.0.4",
     "cross-env": "^7.0.3",
     "gulp": "^5.0.0",
@@ -21,6 +22,7 @@
     "gulp-cli": "^3.0.0",
     "gulp-esbuild": "^0.14.0",
     "gulp-if": "^3.0.0",
+    "gulp-postcss": "^10.0.0",
     "gulp-sass": "^6.0.1",
     "gulp-sourcemaps": "^3.0.0",
     "localtunnel": "^2.0.2",
