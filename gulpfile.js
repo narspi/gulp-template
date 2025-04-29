@@ -6,8 +6,7 @@ import * as dartSass from "sass";
 import gulpSass from "gulp-sass";
 import cleanCSS from "gulp-clean-css";
 import gulpif from "gulp-if";
-import rollup from "gulp-rollup";
-import terser from "@rollup/plugin-terser";
+import gulpEsbuild from "gulp-esbuild";
 
 const isDevelopment = process.env.PRODUCTION === "development";
 const isTunnel = process.env.TUNNEL === "run";
@@ -38,13 +37,15 @@ const createCss = () => {
     .pipe(gulpif(isDevelopment, sourcemaps.init()))
     .pipe(
       scss({
-        outputStyle: "expanded",
+        outputStyle: `${isDevelopment? 'expanded' : 'compressed'}`,
       })
     )
     .pipe(
-      cleanCSS({
-        format: "beautify",
-      })
+      cleanCSS(
+        {
+          level: 2
+        }
+      )
     )
     .pipe(gulpif(isDevelopment, sourcemaps.write()))
     .pipe(dest("dist/css"))
@@ -54,24 +55,14 @@ const createCss = () => {
 const createJs = () => {
   return gulp
     .src("./src/js/**/*.js")
-    .pipe(gulpif(isDevelopment, sourcemaps.init()))
     .pipe(
-      rollup({
-        input: "src/js/main.js",
-        format: "iife",
-        allowRealFiles: true,
-        plugins: [
-          terser({
-            mangle: false, // Отключаем манглирование
-            format: {
-              beautify: true, // Отключаем минификацию
-              comments: true, // Сохраняем комментарии
-            },
-          }),
-        ],
+      gulpEsbuild({
+        bundle: true, // Собираем все импорты в один файл
+        minify: !isDevelopment, // Минификация только в production
+        sourcemap: isDevelopment, // Генерация sourcemaps в dev-режиме
+        target: "es6", // Целевая версия JS
       })
     )
-    .pipe(gulpif(isDevelopment, sourcemaps.write()))
     .pipe(dest("dist/js"))
     .pipe(sync.stream());
 };
@@ -84,6 +75,10 @@ const transportImg = () => {
   return src("./src/img/**/*.*").pipe(dest("dist/img"));
 };
 
+const transportFiles = () => {
+  return src("./src/assets/**/*.*").pipe(dest("dist/assets"));
+};
+
 const server = () => {
   sync.init({
     server: "./dist",
@@ -94,6 +89,7 @@ const server = () => {
   watch("./src/html/**/*.html", htmlInclude);
   watch("./src/scss/**/*.scss", createCss);
   watch("./src/js/**/*.js", createJs);
+  watch("./src/assets/**/*.*", transportFiles);
 };
 
 const buildServer = () => {
@@ -109,6 +105,7 @@ const defaultTask = series(
   createJs,
   transportFonts,
   transportImg,
+  transportFiles,
   server
 );
 
@@ -117,6 +114,7 @@ const buildTask = series(
   createCss,
   createJs,
   transportFonts,
+  transportFiles,
   transportImg
 );
 

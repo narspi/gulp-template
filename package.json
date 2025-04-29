@@ -14,24 +14,20 @@
   "author": "alexander ivanov",
   "license": "ISC",
   "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.4",
-    "browser-sync": "^3.0.2",
+    "browser-sync": "^3.0.4",
     "cross-env": "^7.0.3",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-clean-css": "^4.3.0",
-    "gulp-cli": "^2.3.0",
+    "gulp-cli": "^3.0.0",
+    "gulp-esbuild": "^0.14.0",
     "gulp-if": "^3.0.0",
-    "gulp-rollup": "^2.17.0",
-    "gulp-sass": "^5.1.0",
+    "gulp-sass": "^6.0.1",
     "gulp-sourcemaps": "^3.0.0",
-    "gulp-terser": "^2.1.0",
     "localtunnel": "^2.0.2",
-    "npm": "^10.3.0",
     "panini": "^1.7.2",
-    "sass": "^1.69.7"
+    "sass": "^1.87.0"
   },
   "dependencies": {
-    "focus-visible": "^5.2.0",
     "modern-normalize": "^2.0.0",
     "swiper": "^11.0.5"
   }
