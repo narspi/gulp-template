@@ -10,6 +10,7 @@ import gulpEsbuild from "gulp-esbuild";
 import plumber from "gulp-plumber";
 import autoprefixer from "autoprefixer";
 import cssnamo from "cssnano";
+import notify from "gulp-notify";
 
 const isDevelopment = process.env.MODE === "development";
 const isTunnel = process.env.TUNNEL === "run";
@@ -48,7 +49,7 @@ const createCss = () => {
       [
         autoprefixer(),
         cssnamo({
-            preset: 'default',
+          preset: 'default',
         })
       ]
     ))
@@ -64,12 +65,11 @@ const createCssTheme = () => {
         outputStyle: "compressed",
       })
     )
-    .pipe(postcss([autoprefixer()]))
     .pipe(postcss(
       [
         autoprefixer(),
         cssnamo({
-            preset: 'default',
+          preset: 'default',
         })
       ]
     ))
@@ -79,7 +79,15 @@ const createCssTheme = () => {
 const createJs = () => {
   return gulp
     .src("./src/js/**/*.js")
-    .pipe(plumber())
+    .pipe(
+      plumber({
+        errorHandler: notify.onError({
+          title: "JS Error",
+          message: "<%= error.message %>",
+          sound: "Bottle", // можно убрать или поменять
+        }),
+      })
+    )
     .pipe(
       gulpEsbuild({
         bundle: true, // Собираем все импорты в один файл
